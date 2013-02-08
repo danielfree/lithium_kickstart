@@ -1,3 +1,7 @@
+<?php
+use lithium\storage\Session;
+use lithium\security\Auth;
+?>
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container">
@@ -18,7 +22,19 @@
 
 			<div class="nav-collapse">
 				<ul class="nav">
-					<li><?php echo $this->html->link('Start', '/'); ?></li>
+                    <li><?php echo $this->html->link('首页', '/'); ?></li>
+                    <?php if (!Auth::check('default')){
+                        ?>
+                    <li><?php echo $this->html->link('注册', '/register'); ?></li>
+                    <li><?= $this->html->link('登录', '/login');?></li>
+                    <?php
+                    } else {
+                    $session = Session::read('default');
+                    echo "<li><a href='#'>".$session['username']."</a></li>";
+                    ?>
+                    <li><?= $this->html->link('退出', '/logout');?></li>
+                    <?php } ?>
+
 				</ul>
 			</div>
 

@@ -7,7 +7,7 @@ use app\extensions\SessionMessage as SessionMessageExtension;
 class SessionMessage extends \lithium\template\Helper {
 
 	protected $_strings = array(
-		'message' => '<div class="alert-message {:type}" data-alert="alert"><a class="close" href="#">×</a><p>{:message}</p></div>'
+		'message' => '<div class="alert alert-{:type}"><button type="button" class="close" data-dismiss="alert">&times;</button><p>{:message}</p></div>'
 	);
 
 	public function get($type = null) {

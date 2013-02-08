@@ -11,6 +11,7 @@
  * it intercepts any writes where the `'expires'` key is set in the options array.
  */
 use lithium\storage\Session;
+use lithium\security\Auth;
 
 Session::config(array(
 	// 'cookie' => array('adapter' => 'Cookie'),
@@ -19,10 +20,10 @@ Session::config(array(
 
 /**
  * Uncomment the lines below to enable forms-based authentication. This configuration will attempt
- * to authenticate users against a `Users` model. In a controller, run
+ * to authenticate users against a `users` model. In a controller, run
  * `Auth::check('default', $this->request)` to authenticate a user. This will check the POST data of
  * the request (`lithium\action\Request::$data`) to see if the fields match the `'fields'` key of
- * the configuration below. If successful, it will write the data returned from `Users::first()` to
+ * the configuration below. If successful, it will write the data returned from `users::first()` to
  * the session using the default session configuration.
  *
  * Once the session data is written, you can call `Auth::check('default')` to check authentication
@@ -37,12 +38,16 @@ Session::config(array(
  */
 // use lithium\security\Auth;
 
-// Auth::config(array(
-// 	'default' => array(
-// 		'adapter' => 'Form',
-// 		'model' => 'Users',
-// 		'fields' => array('username', 'password')
-// 	)
-// ));
-
+ Auth::config(array(
+ 	'default' => array(
+ 		'adapter' => 'Form',
+ 		'model' => 'Users',
+ 		'fields' => array('username', 'password'),
+        'filters' => array('password' => array('lithium\util\String', 'hash')),
+        'validators' => array('password' => false)
+ 	)
+ ));
+$db = \lithium\data\Connections::get('default')->connection;
+$c = new \MongoCollection($db, 'users');
+$c->ensureIndex(array('username' => 1), array('unique' => true));
 ?>
